@@ -29,6 +29,17 @@ public:
 	void set_y(float y) { this->y = y; }
 };
 
+class Circle : public Point
+{
+private:
+	float radius;
+	
+public:
+	Circle() : radius(0.0f) {}
+	float get_radius() const { return radius; }
+	void set_radius(float radius) { this->radius = radius; }
+};
+
 int main()
 {
 	Shape * shape = new Point();

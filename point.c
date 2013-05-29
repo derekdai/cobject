@@ -6,7 +6,7 @@ void point_init(Point * self)
 {
 	assert(NULL != self);
 	
-	shape_init((Shape *) self);
+	shape_init(SHAPE(self));
 	self->x = 0.0f;
 	self->y = 0.0f;
 }

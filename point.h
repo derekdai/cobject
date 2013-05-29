@@ -3,14 +3,14 @@
 
 #include "shape.h"
 
+#define POINT(o) ((Point *) (o))
+
 typedef struct _Point Point;
 
 struct _Point
 {
 	Shape base;
-	
 	float x;
-	
 	float y;
 };
 

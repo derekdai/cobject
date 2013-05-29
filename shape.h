@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define SHAPE(o) ((Shape *) (o))
+
 typedef struct _Shape Shape;
 
 struct _Shape
