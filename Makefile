@@ -1,4 +1,4 @@
-SRC=test.c shape.c
+SRC=test.c shape.c point.c
 SRCXX=test.cpp
 
 all: test testpp
