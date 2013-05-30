@@ -1,12 +1,19 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include "point.h"
+
+static void point_draw(Shape * self)
+{
+	printf("Point\n");
+}
 
 void point_init(Point * self)
 {
 	assert(NULL != self);
 	
 	shape_init(SHAPE(self));
+	SHAPE(self)->draw = point_draw;
 	self->x = 0.0f;
 	self->y = 0.0f;
 }

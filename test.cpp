@@ -1,4 +1,7 @@
 #include <cstdint>
+#include <iostream>
+
+using namespace std;
 
 class Shape
 {
@@ -9,10 +12,9 @@ protected:
     Shape() : argb(0xffffffff) {}
 
 public:
-
     uint32_t get_argb() const { return argb; }
-
     void set_argb(uint32_t argb) { this->argb = argb; }
+    virtual void draw() = 0;
 };
 
 class Point : public Shape
@@ -27,6 +29,7 @@ public:
 	void set_x(float x) { this->x = x; }
 	float get_y() const { return y; }
 	void set_y(float y) { this->y = y; }
+	virtual void draw() { cout << "Point\n"; }
 };
 
 class Circle : public Point
@@ -38,11 +41,16 @@ public:
 	Circle() : radius(0.0f) {}
 	float get_radius() const { return radius; }
 	void set_radius(float radius) { this->radius = radius; }
+	virtual void draw() { cout << "Circle\n"; }
 };
 
 int main()
 {
-	Shape * shape = new Point();
+	Shape * shapes[] = { new Point(), new Circle() };
+	for(int i = 0; i < sizeof(shapes) / sizeof(shapes[0]); i ++) {
+		shapes[i]->draw();
+		delete shapes[i];
+	}
 	
 	return 0;
 }

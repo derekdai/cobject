@@ -1,12 +1,19 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include "circle.h"
+
+static void circle_draw(Shape * self)
+{
+	printf("Circle\n");
+}
 
 void circle_init(Circle * self)
 {
 	assert(NULL != self);
 	
 	point_init(POINT(self));
+	SHAPE(self)->draw = circle_draw;
 	self->radius = 1.0f;
 }
 

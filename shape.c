@@ -22,3 +22,11 @@ void shape_set_argb(Shape * self, uint32_t argb)
 
     self->argb = argb;
 }
+
+void shape_draw(Shape * self)
+{
+	assert(NULL != self);
+	assert(NULL != self->draw);
+	
+	self->draw(self);
+}
