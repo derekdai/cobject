@@ -8,23 +8,14 @@ static void circle_draw(Shape * self)
 	printf("Circle\n");
 }
 
-void circle_init(Circle * self)
+static void circle_init(Circle * self)
 {
-	assert(NULL != self);
-	
-	point_init(POINT(self));
-	SHAPE(self)->draw = circle_draw;
 	self->radius = 1.0f;
 }
 
-Circle * circle_new()
+Shape * circle_new()
 {
-	Circle * self = malloc(sizeof(Circle));
-	if(self) {
-		circle_init(self);
-	}
-	
-	return self;
+   return object_create_instance(OBJECT_CLASS(& circle_class));
 }
 
 void circle_free(Circle * self)
@@ -46,3 +37,11 @@ void circle_set_radius(Circle * self, float radius)
 	self->radius = radius;
 }
 
+const CircleClass circle_class = {
+   OBJECT_CLASS(& point_class),		/* parent */
+   "Circle",						/* name */
+   sizeof(Circle),					/* instance size */
+   (InstanceInitFunc) circle_init,	/* constructor */
+   CLASS_FLAGS_NONE,                /* Circle is a concrete class */
+   circle_draw						/* virtual function draw */
+};

@@ -2,10 +2,8 @@
 #include <assert.h>
 #include "shape.h"
 
-void shape_init(Shape * self)
+static void shape_init(Shape * self)
 {
-    assert(NULL != self);
-
     self->argb = 0xffffffff;
 }
 
@@ -26,7 +24,16 @@ void shape_set_argb(Shape * self, uint32_t argb)
 void shape_draw(Shape * self)
 {
 	assert(NULL != self);
-	assert(NULL != self->draw);
+	assert(NULL != SHAPE_CLASS(object_get_class(self))->draw);
 	
-	self->draw(self);
+	SHAPE_CLASS(object_get_class(self))->draw(self);
 }
+
+const ShapeClass shape_class = {
+   OBJECT_CLASS(& object_class),	/* parent */
+   "Shape",							/* name */
+   sizeof(Shape),					/* instance size */
+   (InstanceInitFunc) shape_init,	/* constructor */
+   CLASS_FLAGS_ABSTRACT,			/* Shape is uninstantiatable */
+   NULL								/* No default draw() function */
+};

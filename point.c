@@ -8,24 +8,15 @@ static void point_draw(Shape * self)
 	printf("Point\n");
 }
 
-void point_init(Point * self)
+static void point_init(Point * self)
 {
-	assert(NULL != self);
-	
-	shape_init(SHAPE(self));
-	SHAPE(self)->draw = point_draw;
 	self->x = 0.0f;
 	self->y = 0.0f;
 }
 
-Point * point_new()
+Shape * point_new()
 {
-	Point * self = malloc(sizeof(Point));
-	if(self) {
-		point_init(self);
-	}
-	
-	return self;
+   return object_create_instance(OBJECT_CLASS(& point_class));
 }
 
 void point_free(Point * self)
@@ -60,3 +51,12 @@ void point_set_y(Point * self, float y)
 	
 	self->y = y;
 }
+
+const PointClass point_class = {
+   OBJECT_CLASS(& shape_class),			/* parent */
+   "Point",								/* name */
+   sizeof(Point),						/* instance size */
+   (InstanceInitFunc) point_init,		/* constructor */
+   CLASS_FLAGS_NONE,					/* class flags */
+   point_draw							/* virtual function draw, from ShapeClass */
+};

@@ -3,9 +3,18 @@
 
 #include "point.h"
 
+#define CIRCLE_CLASS(c) ((CircleClass *) (c))
+
 #define CIRCLE(o) ((Circle *) (o))
 
+typedef struct _CircleClass CircleClass;
+
 typedef struct _Circle Circle;
+
+struct _CircleClass
+{
+   PointClass base;
+};
 
 struct _Circle
 {
@@ -13,14 +22,12 @@ struct _Circle
 	float radius;
 };
 
-Circle * circle_new();
-
-void circle_free(Circle * self);
-
-void circle_init(Circle * self);
+Shape * circle_new();
 
 float circle_get_radius(const Circle * self);
 
 void circle_set_radius(Circle * self, float radius);
+
+extern const CircleClass circle_class;
 
 #endif /* __CURCLE_H_ */
