@@ -10,9 +10,9 @@ void * object_create_instance(const ObjectClass * clazz)
 	assert(! (CLASS_FLAGS_ABSTRACT & clazz->flags));
 	assert(sizeof(Object) <= clazz->inst_size);
 	
-	void * self = malloc(clazz->inst_size);
+	Object * self = malloc(clazz->inst_size);
 	if(self) {
-		OBJECT(self)->clazz = clazz;
+		self->clazz = clazz;
 		object_init(self, clazz);
 	}
 	
@@ -39,7 +39,7 @@ const void * object_get_class(void * self)
 {
 	assert(NULL != self);
 	
-	return OBJECT(self)->clazz;
+	return ((Object *) self)->clazz;
 }
 
 int object_class_is(const ObjectClass * self, const ObjectClass * other)

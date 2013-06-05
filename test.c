@@ -13,12 +13,12 @@ int main()
 			OBJECT_CLASS(& line_class),
 	};
 	Shape * shape = point_new();
-	const ObjectClass * clazz = object_get_class(shape);
+	const ObjectClass * clazz = OBJECT_GET_CLASS(shape);
 	int i;
 	for(i = 0; i < sizeof(classes) / sizeof(classes[0]); i ++) {
 		printf("%s %s %s\n",
 			   object_class_get_name(clazz),
-			   object_class_is(clazz, classes[i]) ? "is" : "is not",
+			   TYPE_CHECK_CLASS_TYPE(clazz, classes[i]) ? "is" : "is not",
 			   object_class_get_name(classes[i]));
 	}
 

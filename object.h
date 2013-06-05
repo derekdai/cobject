@@ -3,11 +3,17 @@
 
 #include <stddef.h>
 
-#define OBJECT(o) ((Object *)(o))
-#define IS_OBJECT(o) (object_class_is(OBJECT_GET_CLASS(o), & object_class))
-#define OBJECT_GET_CLASS(o) (object_get_class(o))
-#define OBJECT_CLASS(c) ((ObjectClass *) (c))
-#define IS_OBJECT_CLASS(c) (object_class_is(c, & object_class))
+#define TYPE_CHECK_INSTANCE_TYPE(o, c)			(object_class_is(object_get_class(o), (c)))
+#define TYPE_CHECK_INSTANCE_CAST(o, c, ctype)	(TYPE_CHECK_INSTANCE_TYPE(o, c) ? (ctype *) (o) : NULL)
+#define TYPE_INSTANCE_GET_CLASS(o, c, ctype)	(TYPE_CHECK_CLASS_CAST(object_get_class(o), c, ctype))
+#define TYPE_CHECK_CLASS_TYPE(c1, c2)			(object_class_is((c1), (c2)))
+#define TYPE_CHECK_CLASS_CAST(c1, c2, ctype)	((const ctype *) (c1))
+
+#define OBJECT(o)				(TYPE_CHECK_INSTANCE_CAST(o, & object_class, Object))
+#define IS_OBJECT(o)			(TYPE_CHECK_INSTANCE_TYPE(o, & object_class))
+#define OBJECT_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, & object_class, ObjectClass))
+#define OBJECT_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, & object_class, ObjectClass))
+#define IS_OBJECT_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, & object_class))
 
 typedef enum _ClassFlags ClassFlags;
 
