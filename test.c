@@ -2,16 +2,26 @@
 #include <stdio.h>
 #include "point.h"
 #include "circle.h"
+#include "line.h"
 
 int main()
 {
-	Shape * shapes[] = { point_new(), circle_new() };
+	const ObjectClass * classes[] = {
+			OBJECT_CLASS(& shape_class),
+			OBJECT_CLASS(& point_class),
+			OBJECT_CLASS(& circle_class),
+			OBJECT_CLASS(& line_class),
+	};
+	Shape * shape = point_new();
+	const ObjectClass * clazz = object_get_class(shape);
 	int i;
-	for(i = 0; i < sizeof(shapes) / sizeof(shapes[0]); i ++) {
-	   shape_draw(shapes[i]);
-	   object_free(shapes[i]);
+	for(i = 0; i < sizeof(classes) / sizeof(classes[0]); i ++) {
+		printf("%s %s %s\n",
+			   object_class_get_name(clazz),
+			   object_class_is(clazz, classes[i]) ? "is" : "is not",
+			   object_class_get_name(classes[i]));
 	}
-	
+
 	return 0;
 }
 

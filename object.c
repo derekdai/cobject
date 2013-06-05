@@ -42,6 +42,30 @@ const void * object_get_class(void * self)
 	return OBJECT(self)->clazz;
 }
 
+int object_class_is(const ObjectClass * self, const ObjectClass * other)
+{
+	assert(NULL != self);
+	assert(NULL != other);
+
+	do {
+		if(self == other) {
+			return 1;
+		}
+
+		self = self->parent;
+	}
+	while(self);
+
+	return 0;
+}
+
+const char * object_class_get_name(const ObjectClass * self)
+{
+	assert(self);
+
+	return self->name;
+}
+
 const ObjectClass object_class = {
 	NULL,							/* parent */
 	"Object",						/* name */
