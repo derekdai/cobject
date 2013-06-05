@@ -4,9 +4,11 @@
 #include <stdint.h>
 #include "object.h"
 
-#define SHAPE_CLASS(c) ((ShapeClass *) (c))
-
-#define SHAPE(o) ((Shape *) (o))
+#define SHAPE(o)				(TYPE_CHECK_INSTANCE_CAST(o, & shape_class, Shape))
+#define IS_SHAPE(o)				(TYPE_CHECK_INSTANCE_TYPE(o, & shape_class))
+#define SHAPE_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, & shape_class, ShapeClass))
+#define SHAPE_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, & shape_class, ShapeClass))
+#define IS_SHAPE_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, & shape_class))
 
 typedef struct _ShapeClass ShapeClass;
 

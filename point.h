@@ -3,9 +3,11 @@
 
 #include "shape.h"
 
-#define POINT_CLASS(c) ((PointClass *) (c))
-
-#define POINT(o) ((Point *) (o))
+#define POINT(o)				(TYPE_CHECK_INSTANCE_CAST(o, & point_class, Point))
+#define IS_POINT(o)				(TYPE_CHECK_INSTANCE_TYPE(o, & point_class))
+#define POINT_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, & point_class, PointClass))
+#define POINT_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, & point_class, PointClass))
+#define IS_POINT_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, & point_class))
 
 typedef struct _PointClass PointClass;
 

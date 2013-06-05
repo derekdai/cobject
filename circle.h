@@ -3,9 +3,11 @@
 
 #include "point.h"
 
-#define CIRCLE_CLASS(c) ((CircleClass *) (c))
-
-#define CIRCLE(o) ((Circle *) (o))
+#define CIRCLE(o)				(TYPE_CHECK_INSTANCE_CAST(o, & circle_class, Circle))
+#define IS_CIRCLE(o)			(TYPE_CHECK_INSTANCE_TYPE(o, & circle_class))
+#define CIRCLE_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, & circle_class, CircleClass))
+#define CIRCLE_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, & circle_class, CircleClass))
+#define IS_CIRCLE_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, & circle_class))
 
 typedef struct _CircleClass CircleClass;
 

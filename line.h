@@ -3,9 +3,11 @@
 
 #include "shape.h"
 
-#define LINE_CLASS(c) ((const LineClass *) (c))
-
-#define LINE(o) ((Line *) (o))
+#define LINE(o)					(TYPE_CHECK_INSTANCE_CAST(o, & line_class, Line))
+#define IS_LINE(o)				(TYPE_CHECK_INSTANCE_TYPE(o, & line_class))
+#define LINE_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, & line_class, LineClass))
+#define LINE_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, & line_class, LineClass))
+#define IS_LINE_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, & line_class))
 
 typedef struct _LineClass LineClass;
 
