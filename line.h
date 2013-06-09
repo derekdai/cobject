@@ -3,11 +3,12 @@
 
 #include "shape.h"
 
-#define LINE(o)					(TYPE_CHECK_INSTANCE_CAST(o, & line_class, Line))
-#define IS_LINE(o)				(TYPE_CHECK_INSTANCE_TYPE(o, & line_class))
-#define LINE_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, & line_class, LineClass))
-#define LINE_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, & line_class, LineClass))
-#define IS_LINE_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, & line_class))
+#define TYPE_LINE				(line_get_type())
+#define LINE(o)					(TYPE_CHECK_INSTANCE_CAST(o, TYPE_LINE, Line))
+#define IS_LINE(o)				(TYPE_CHECK_INSTANCE_TYPE(o, TYPE_LINE))
+#define LINE_GET_CLASS(o)		(TYPE_INSTANCE_GET_CLASS(o, TYPE_LINE, LineClass))
+#define LINE_CLASS(c)			(TYPE_CHECK_CLASS_CAST(c, TYPE_LINE, LineClass))
+#define IS_LINE_CLASS(c)		(TYPE_CHECK_CLASS_TYPE(c, TYPE_LINE))
 
 typedef struct _LineClass LineClass;
 
@@ -27,6 +28,8 @@ struct _Line
 	float x2;
 	float y2;
 };
+
+Type line_get_type();
 
 Shape * line_new();
 

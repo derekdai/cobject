@@ -2,6 +2,16 @@
 #include <assert.h>
 #include "line.h"
 
+static void line_draw()
+{
+	printf("Line\n");
+}
+
+static void line_class_init(LineClass * clazz)
+{
+	SHAPE_CLASS(clazz)->draw = line_draw;
+}
+
 static void line_init(Line * self)
 {
 	self->x1 = 0.0f;
@@ -10,14 +20,24 @@ static void line_init(Line * self)
 	self->y2 = 0.0f;
 }
 
-static void line_draw()
+Type line_get_type()
 {
-	printf("Line\n");
+	static Type type = TYPE_INVALID;
+	if(TYPE_INVALID == type) {
+		type = type_register(TYPE_SHAPE,
+							 "Line",
+							 sizeof(LineClass),
+							 (ClassInitFunc) line_class_init,
+							 sizeof(Line),
+							 TYPE_FLAGS_NONE);
+	}
+
+	return type;
 }
 
 Shape * line_new()
 {
-	return object_create_instance(OBJECT_CLASS(& line_class));
+	return object_create_instance(TYPE_LINE);
 }
 
 float line_get_x1(const Line * self)
@@ -75,12 +95,3 @@ void line_set_y2(Line * self, float y2)
 
 	self->y2 = y2;
 }
-
-const LineClass line_class = {
-		OBJECT_CLASS(& shape_class),
-		"Line",
-		sizeof(Line),
-		(InstanceInitFunc) line_init,
-		CLASS_FLAGS_NONE,
-		line_draw
-};

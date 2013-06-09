@@ -2,74 +2,46 @@
 #include <assert.h>
 #include "object.h"
 
-static void object_init(Object * self, const ObjectClass * clazz);
-
-void * object_create_instance(const ObjectClass * clazz)
+Type object_get_type()
 {
-	assert(NULL != clazz);
-	assert(! (CLASS_FLAGS_ABSTRACT & clazz->flags));
-	assert(sizeof(Object) <= clazz->inst_size);
-	
-	Object * self = malloc(clazz->inst_size);
-	if(self) {
-		self->clazz = clazz;
-		object_init(self, clazz);
+	static Type type = TYPE_INVALID;
+	if(! type) {
+		type = type_register(TYPE_INVALID,
+							 "Object",
+							 sizeof(ObjectClass),
+							 NULL,
+							 sizeof(Object),
+							 TYPE_FLAGS_ABSTRACT);
 	}
+
+	return type;
+}
+
+static void object_init(Object * self, Type type)
+{
+	if(TYPE_OBJECT != type) {
+		object_init(self, type_get_parent(type));
+	}
+
+	ObjectClass * clazz = OBJECT_CLASS(type_get_class(type));
+	if(clazz->init) {
+		clazz->init(self);
+	}
+}
+
+void * object_create_instance(Type type)
+{
+	assert(type_is(type, TYPE_OBJECT));
 	
-	return self;
+	Object * object = OBJECT(type_create_instance(type));
+	if(object) {
+		object_init(object, type);
+	}
+
+	return object;
 }
 
 void object_free(void * self)
 {
 	free(self);
 }
-
-static void object_init(Object * self, const ObjectClass * clazz)
-{
-	if(clazz->parent) {
-		object_init(self, clazz->parent);
-	}
-	
-	if(clazz->inst_init) {
-		clazz->inst_init(self);
-	}
-}
-
-const void * object_get_class(void * self)
-{
-	assert(NULL != self);
-	
-	return ((Object *) self)->clazz;
-}
-
-int object_class_is(const ObjectClass * self, const ObjectClass * other)
-{
-	assert(NULL != self);
-	assert(NULL != other);
-
-	do {
-		if(self == other) {
-			return 1;
-		}
-
-		self = self->parent;
-	}
-	while(self);
-
-	return 0;
-}
-
-const char * object_class_get_name(const ObjectClass * self)
-{
-	assert(self);
-
-	return self->name;
-}
-
-const ObjectClass object_class = {
-	NULL,							/* parent */
-	"Object",						/* name */
-	sizeof(Object),					/* instance size */
-	NULL,							/* constructor */
-	CLASS_FLAGS_ABSTRACT			/* Object is a abstract class */
-};

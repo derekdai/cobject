@@ -8,15 +8,35 @@ static void point_draw(Shape * self)
 	printf("Point\n");
 }
 
+static void point_class_init(ShapeClass * clazz)
+{
+	clazz->draw = point_draw;
+}
+
 static void point_init(Point * self)
 {
 	self->x = 0.0f;
 	self->y = 0.0f;
 }
 
+Type point_get_type()
+{
+	static Type type = TYPE_INVALID;
+	if(! type) {
+		type = type_register(TYPE_SHAPE,
+							 "Point",
+							 sizeof(PointClass),
+							 (ClassInitFunc) point_class_init,
+							 sizeof(Point),
+							 0);
+	}
+
+	return type;
+}
+
 Shape * point_new()
 {
-   return object_create_instance(OBJECT_CLASS(& point_class));
+   return object_create_instance(TYPE_POINT);
 }
 
 void point_free(Point * self)
@@ -51,12 +71,3 @@ void point_set_y(Point * self, float y)
 	
 	self->y = y;
 }
-
-const PointClass point_class = {
-   OBJECT_CLASS(& shape_class),			/* parent */
-   "Point",								/* name */
-   sizeof(Point),						/* instance size */
-   (InstanceInitFunc) point_init,		/* constructor */
-   CLASS_FLAGS_NONE,					/* class flags */
-   point_draw							/* virtual function draw, from ShapeClass */
-};

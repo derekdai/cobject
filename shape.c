@@ -2,9 +2,29 @@
 #include <assert.h>
 #include "shape.h"
 
+static void shape_class_init(ShapeClass * clazz)
+{
+	clazz->draw = NULL;
+}
+
 static void shape_init(Shape * self)
 {
     self->argb = 0xffffffff;
+}
+
+Type shape_get_type()
+{
+	static Type type = TYPE_INVALID;
+	if(! type) {
+		type = type_register(TYPE_OBJECT,
+							 "Shape",
+							 sizeof(ShapeClass),
+							 (ClassInitFunc) shape_class_init,
+							 sizeof(Shape),
+							 TYPE_FLAGS_ABSTRACT);
+	}
+
+	return type;
 }
 
 uint32_t shape_get_argb(const Shape * self)
@@ -24,16 +44,7 @@ void shape_set_argb(Shape * self, uint32_t argb)
 void shape_draw(Shape * self)
 {
 	assert(NULL != self);
-	assert(NULL != SHAPE_CLASS(object_get_class(self))->draw);
+	assert(NULL != SHAPE_GET_CLASS(self)->draw);
 	
-	SHAPE_CLASS(object_get_class(self))->draw(self);
+	SHAPE_GET_CLASS(self)->draw(self);
 }
-
-const ShapeClass shape_class = {
-   OBJECT_CLASS(& object_class),	/* parent */
-   "Shape",							/* name */
-   sizeof(Shape),					/* instance size */
-   (InstanceInitFunc) shape_init,	/* constructor */
-   CLASS_FLAGS_ABSTRACT,			/* Shape is uninstantiatable */
-   NULL								/* No default draw() function */
-};

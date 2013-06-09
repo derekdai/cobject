@@ -8,14 +8,34 @@ static void circle_draw(Shape * self)
 	printf("Circle\n");
 }
 
+static void circle_class_init(CircleClass * clazz)
+{
+	SHAPE_CLASS(clazz)->draw = circle_draw;
+}
+
 static void circle_init(Circle * self)
 {
 	self->radius = 1.0f;
 }
 
+Type circle_get_type()
+{
+	static Type type = TYPE_INVALID;
+	if(! type) {
+		type = type_register(TYPE_POINT,
+							 "Circle",
+							 sizeof(CircleClass),
+							 (ClassInitFunc) circle_class_init,
+							 sizeof(Circle),
+							 0);
+	}
+
+	return type;
+}
+
 Shape * circle_new()
 {
-   return object_create_instance(OBJECT_CLASS(& circle_class));
+   return object_create_instance(TYPE_CIRCLE);
 }
 
 void circle_free(Circle * self)
@@ -36,12 +56,3 @@ void circle_set_radius(Circle * self, float radius)
 	
 	self->radius = radius;
 }
-
-const CircleClass circle_class = {
-   OBJECT_CLASS(& point_class),		/* parent */
-   "Circle",						/* name */
-   sizeof(Circle),					/* instance size */
-   (InstanceInitFunc) circle_init,	/* constructor */
-   CLASS_FLAGS_NONE,                /* Circle is a concrete class */
-   circle_draw						/* virtual function draw */
-};

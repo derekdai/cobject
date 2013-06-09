@@ -6,20 +6,27 @@
 
 int main()
 {
-	const ObjectClass * classes[] = {
-			OBJECT_CLASS(& shape_class),
-			OBJECT_CLASS(& point_class),
-			OBJECT_CLASS(& circle_class),
-			OBJECT_CLASS(& line_class),
+	Type types[] = {
+			TYPE_OBJECT,
+			TYPE_SHAPE,
+			TYPE_POINT,
+			TYPE_CIRCLE,
+			TYPE_LINE
 	};
-	Shape * shape = point_new();
-	const ObjectClass * clazz = OBJECT_GET_CLASS(shape);
-	int i;
-	for(i = 0; i < sizeof(classes) / sizeof(classes[0]); i ++) {
-		printf("%s %s %s\n",
-			   object_class_get_name(clazz),
-			   TYPE_CHECK_CLASS_TYPE(clazz, classes[i]) ? "is" : "is not",
-			   object_class_get_name(classes[i]));
+	Shape * shapes[] = {
+			point_new(),
+			circle_new(),
+			line_new()
+	};
+	int i, j;
+	for(j = 0; j < sizeof(shapes) / sizeof(shapes[0]); j ++) {
+		Type shape_type = TYPE_FROM_INSTANCE(shapes[j]);
+		for(i = 0; i < sizeof(types) / sizeof(types[0]); i ++) {
+			printf("%s %s %s\n",
+				   type_get_name(shape_type),
+				   type_is(shape_type, types[i]) ? "is" : "is not",
+				   type_get_name(types[i]));
+		}
 	}
 
 	return 0;
